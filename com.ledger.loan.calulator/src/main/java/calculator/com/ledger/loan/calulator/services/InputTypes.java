@@ -3,7 +3,9 @@ package calculator.com.ledger.loan.calulator.services;
 import java.util.Optional;
 
 public enum InputTypes {
-    LOAN;
+    LOAN,
+    PAYMENT,
+    BALANCE;
 
     public static Optional<InputTypes> findInput(String stringValue) {
         for (InputTypes type : InputTypes.values()) {

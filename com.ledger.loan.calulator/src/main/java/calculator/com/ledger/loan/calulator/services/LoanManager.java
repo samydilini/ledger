@@ -18,8 +18,16 @@ public class LoanManager {
         return loanManager;
     }
 
-    public Optional<Loan> getNewloan(String bankName, String userName, Integer integer, int parseInt, int parseInt1) {
+    public Optional<Loan> getNewLoan(String bankName, String userName, Integer integer, int parseInt, int parseInt1) {
         return Optional.of(new Loan());
+    }
+
+    public Optional<Loan> makePayment(String s, String s1, Integer integer, int parseInt) {
+        return Optional.of(new Loan());
+    }
+
+    public String generateBalance(String s, String s1, int parseInt) {
+        return null;
     }
 
 }

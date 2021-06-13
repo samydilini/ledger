@@ -32,31 +32,47 @@ public class InputResolverTest {
         String amount = "10000";
         String years = "5";
         String rate = "4";
-        String record = "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-        when(loanManager.getNewloan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+        String loanRecord =
+            "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
+        when(loanManager.getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
             Integer.parseInt(rate))).thenReturn(Optional.of(new Loan()));
 
-        List<String> outPuts = inputResolver.resolve(Arrays.asList(record));
-        verify(loanManager).getNewloan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord));
+        verify(loanManager).getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
             Integer.parseInt(rate));
         assertEquals(0, outPuts.size());
     }
 
     @Test
-    public void testValidCall() {
+    public void testValidPaymentCall() {
         String bankName = "IDIDI";
         String userName = "Dale";
-        String amount = "10000";
-        String years = "5";
-        String rate = "4";
-        String loanCall = "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-        when(loanManager.getNewloan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
-            Integer.parseInt(rate))).thenReturn(Optional.of(new Loan()));
+        String lump = "10000";
+        String emai = "5";
+        String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
+        when(loanManager.makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        )).thenReturn(Optional.of(new Loan()));
 
-        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanCall));
-        verify(loanManager).getNewloan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
-            Integer.parseInt(rate));
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(paymentCall));
+        verify(loanManager).makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        );
         assertEquals(0, outPuts.size());
+    }
+
+    @Test
+    public void testValidBalanceCall() {
+        String bankName = "IDIDI";
+        String userName = "Dale";
+        String emai = "5";
+        String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
+        when(loanManager.generateBalance(bankName, userName, Integer.parseInt(emai)
+        )).thenReturn("balanceString");
+
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(balanceCall));
+        verify(loanManager).generateBalance(bankName, userName, Integer.parseInt(emai)
+        );
+        assertEquals(1, outPuts.size());
+        assertEquals("balanceString", outPuts.get(0));
     }
 
 }

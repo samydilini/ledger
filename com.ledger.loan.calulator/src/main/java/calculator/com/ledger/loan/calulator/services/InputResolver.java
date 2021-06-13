@@ -1,5 +1,7 @@
 package calculator.com.ledger.loan.calulator.services;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,7 @@ public class InputResolver {
     }
 
     public List<String> resolve(List<String> records) {
+        ArrayList<String> strings = new ArrayList<>();
         for (String record : records) {
             List<String> recordValues = Arrays.asList(record.split(" "));
 
@@ -38,20 +41,53 @@ public class InputResolver {
                     if (handleAddingLoan(record, recordValues).isEmpty()) {
                         return new ArrayList<>();
                     }
-
+                    break;
+                case PAYMENT:
+                    if (handleLoanPayment(record, recordValues).isEmpty()) {
+                        return new ArrayList<>();
+                    }
+                    break;
+                case BALANCE:
+                    String output = getBalance(record, recordValues);
+                    if (!StringUtils.isBlank(output)) {
+                        strings.add(output);
+                    }
                     break;
 
                 default:
                     break;
             }
         }
-        return new ArrayList<>();
+        return strings;
+    }
+
+    private String getBalance(String record, List<String> recordValues) {
+        try {
+            return loanManager
+                .generateBalance(recordValues.get(1), recordValues.get(2),
+                    Integer.parseInt(recordValues.get(3)));
+        } catch (NumberFormatException ex) {
+            LOGGER.log(Level.WARNING, String.format("Error occurred while converting: %s to a loan type", record));
+            return null;
+        }
+    }
+
+    private Optional<Loan> handleLoanPayment(String record, List<String> recordValues) {
+        try {
+            return loanManager
+                .makePayment(recordValues.get(1), recordValues.get(2),
+                    Integer.getInteger(recordValues.get(3)),
+                    Integer.parseInt(recordValues.get(4)));
+        } catch (NumberFormatException ex) {
+            LOGGER.log(Level.WARNING, String.format("Error occurred while converting: %s to a loan type", record));
+            return Optional.empty();
+        }
     }
 
     private Optional<Loan> handleAddingLoan(String record, List<String> recordValues) {
         try {
             return loanManager
-                .getNewloan(recordValues.get(1), recordValues.get(2),
+                .getNewLoan(recordValues.get(1), recordValues.get(2),
                     Integer.getInteger(recordValues.get(3)),
                     Integer.parseInt(recordValues.get(4)), Integer.parseInt(recordValues.get(5)));
         } catch (NumberFormatException ex) {
