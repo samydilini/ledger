@@ -1,6 +1,7 @@
 package calculator.com.ledger.loan.calulator.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,6 +74,120 @@ public class InputResolverTest {
         );
         assertEquals(1, outPuts.size());
         assertEquals("balanceString", outPuts.get(0));
+    }
+
+    @Test
+    public void testValidInputsCall() {
+        String bankName = "IDIDI";
+        String userName = "Dale";
+        String amount = "10000";
+        String years = "5";
+        String rate = "4";
+        String loanRecord =
+            "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
+        when(loanManager.getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate))).thenReturn(Optional.of(new Loan()));
+
+        String lump = "10000";
+        String emai = "5";
+        String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
+        when(loanManager.makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        )).thenReturn(Optional.of(new Loan()));
+
+        String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
+        when(loanManager.generateBalance(bankName, userName, Integer.parseInt(emai)
+        )).thenReturn("balanceString");
+
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
+        verify(loanManager).getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate));
+        verify(loanManager).makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        );
+        verify(loanManager).generateBalance(bankName, userName, Integer.parseInt(emai)
+        );
+        assertEquals(1, outPuts.size());
+        assertEquals("balanceString", outPuts.get(0));
+    }
+
+    @Test
+    public void testInValidInputsCall() {
+        String bankName = "IDIDI";
+        String userName = "Dale";
+        String amount = "10000";
+        String years = "A";
+        String rate = "4";
+        String loanRecord =
+            "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
+        String lump = "10000";
+        String emai = "5";
+        String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
+        String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
+
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
+        assertEquals(0, outPuts.size());
+    }
+
+       @Test
+    public void testWhenLoanNotRecorded() {
+        String bankName = "IDIDI";
+        String userName = "Dale";
+        String amount = "10000";
+        String years = "5";
+        String rate = "4";
+        String loanRecord =
+            "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
+        when(loanManager.getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate))).thenReturn(Optional.empty());
+
+        String lump = "10000";
+        String emai = "5";
+        String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
+        when(loanManager.makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        )).thenReturn(Optional.of(new Loan()));
+
+        String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
+        when(loanManager.generateBalance(bankName, userName, Integer.parseInt(emai)
+        )).thenReturn("balanceString");
+
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
+        verify(loanManager).getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate));
+        verify(loanManager, times(0)).makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        );
+        verify(loanManager, times(0)).generateBalance(bankName, userName, Integer.parseInt(emai)
+        );
+        assertEquals(0, outPuts.size());
+    }
+    @Test
+    public void testWhenPaymentNotWorkingNotRecorded() {
+        String bankName = "IDIDI";
+        String userName = "Dale";
+        String amount = "10000";
+        String years = "5";
+        String rate = "4";
+        String loanRecord =
+            "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
+        when(loanManager.getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate))).thenReturn(Optional.of(new Loan()));
+
+        String lump = "10000";
+        String emai = "5";
+        String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
+        when(loanManager.makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        )).thenReturn(Optional.empty());
+
+        String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
+        when(loanManager.generateBalance(bankName, userName, Integer.parseInt(emai)
+        )).thenReturn("balanceString");
+
+        List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
+        verify(loanManager).getNewLoan(bankName, userName, Integer.getInteger(amount), Integer.parseInt(years),
+            Integer.parseInt(rate));
+        verify(loanManager).makePayment(bankName, userName, Integer.getInteger(lump), Integer.parseInt(emai)
+        );
+        verify(loanManager, times(0)).generateBalance(bankName, userName, Integer.parseInt(emai)
+        );
+        assertEquals(0, outPuts.size());
     }
 
 }

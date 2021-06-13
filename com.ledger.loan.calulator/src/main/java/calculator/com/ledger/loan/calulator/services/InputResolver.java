@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import calculator.com.ledger.loan.calulator.models.InputTypes;
 import calculator.com.ledger.loan.calulator.models.Loan;
 
 public class InputResolver {

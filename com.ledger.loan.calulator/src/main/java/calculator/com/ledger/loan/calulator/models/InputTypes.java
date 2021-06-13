@@ -1,4 +1,4 @@
-package calculator.com.ledger.loan.calulator.services;
+package calculator.com.ledger.loan.calulator.models;
 
 import java.util.Optional;
 
