@@ -67,7 +67,7 @@ public class LoanManagerTest {
         String bank = "IDIDI_PAY1";
         String userName = "Dale";
 
-        Integer lump = 50;
+        int lump = 50;
         int payEmi = 3;
         Optional<Loan> valueAfterPay = loanManager.makePayment(bank, userName, lump, payEmi);
         assertTrue(valueAfterPay.isEmpty());
@@ -82,7 +82,7 @@ public class LoanManagerTest {
         int rate = 4;
         loanManager.getNewLoan(bank, userName, amount, years, rate);
 
-        Integer lump = 50;
+        int lump = 50;
         int payEmi = 3;
         Optional<Loan> valueAfterPay = loanManager.makePayment(bank, userName, lump, payEmi);
         assertTrue(valueAfterPay.isPresent());

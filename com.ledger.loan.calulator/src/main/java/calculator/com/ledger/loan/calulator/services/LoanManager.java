@@ -33,7 +33,7 @@ public class LoanManager {
         return Optional.of(loan);
     }
 
-    public Optional<Loan> makePayment(String bankName, String userName, Integer lump, int emi) {
+    public Optional<Loan> makePayment(String bankName, String userName, int lump, int emi) {
         String key = bankName + userName;
         Loan loan = loanMap.get(key);
         if (loan == null) {

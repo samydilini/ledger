@@ -77,7 +77,7 @@ public class InputResolver {
         try {
             return loanManager
                 .makePayment(recordValues.get(1), recordValues.get(2),
-                    Integer.valueOf(recordValues.get(3)),
+                    Integer.parseInt(recordValues.get(3)),
                     Integer.parseInt(recordValues.get(4)));
         } catch (NumberFormatException ex) {
             LOGGER.log(Level.WARNING, String.format("Error occurred while converting: %s to a loan type", record));
@@ -89,7 +89,7 @@ public class InputResolver {
         try {
             return loanManager
                 .getNewLoan(recordValues.get(1), recordValues.get(2),
-                    Integer.valueOf(recordValues.get(3)),
+                    Integer.parseInt(recordValues.get(3)),
                     Integer.parseInt(recordValues.get(4)), Integer.parseInt(recordValues.get(5)));
         } catch (NumberFormatException ex) {
             LOGGER.log(Level.WARNING, String.format("Error occurred while converting: %s to a loan type", record));

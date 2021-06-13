@@ -37,13 +37,12 @@ public class InputResolverTest {
         Optional<Loan> optionalLoan = Optional.of(Mockito.mock(Loan.class));
         String loanRecord =
             "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-
-        when(loanManager.getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        when(loanManager.getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate))).thenReturn(optionalLoan);
 
 
         List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord));
-        verify(loanManager).getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        verify(loanManager).getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate));
         assertEquals(0, outPuts.size());
     }
@@ -56,11 +55,11 @@ public class InputResolverTest {
         String emai = "5";
         Optional<Loan> optionalLoan = Optional.of(Mockito.mock(Loan.class));
         String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
-        when(loanManager.makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        when(loanManager.makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         )).thenReturn(optionalLoan);
 
         List<String> outPuts = inputResolver.resolve(Arrays.asList(paymentCall));
-        verify(loanManager).makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        verify(loanManager).makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         );
         assertEquals(0, outPuts.size());
     }
@@ -91,13 +90,13 @@ public class InputResolverTest {
         Optional<Loan> optionalLoan = Optional.of(Mockito.mock(Loan.class));
         String loanRecord =
             "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-        when(loanManager.getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        when(loanManager.getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate))).thenReturn(optionalLoan);
 
         String lump = "10000";
         String emai = "5";
         String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
-        when(loanManager.makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        when(loanManager.makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         )).thenReturn(optionalLoan);
 
         String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
@@ -105,9 +104,9 @@ public class InputResolverTest {
         )).thenReturn("balanceString");
 
         List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
-        verify(loanManager).getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        verify(loanManager).getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate));
-        verify(loanManager).makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        verify(loanManager).makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         );
         verify(loanManager).generateBalance(bankName, userName, Integer.parseInt(emai)
         );
@@ -142,14 +141,14 @@ public class InputResolverTest {
         String rate = "4";
         String loanRecord =
             "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-        when(loanManager.getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        when(loanManager.getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate))).thenReturn(Optional.empty());
 
         String lump = "10000";
         String emai = "5";
         String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
         Optional<Loan> optionalLoan = Optional.of(Mockito.mock(Loan.class));
-        when(loanManager.makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        when(loanManager.makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         )).thenReturn(optionalLoan);
 
         String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
@@ -157,9 +156,9 @@ public class InputResolverTest {
         )).thenReturn("balanceString");
 
         List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
-        verify(loanManager).getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        verify(loanManager).getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate));
-        verify(loanManager, times(0)).makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        verify(loanManager, times(0)).makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         );
         verify(loanManager, times(0)).generateBalance(bankName, userName, Integer.parseInt(emai)
         );
@@ -176,13 +175,13 @@ public class InputResolverTest {
         Optional<Loan> optionalLoan = Optional.of(Mockito.mock(Loan.class));
         String loanRecord =
             "LOAN" + SPACE + bankName + SPACE + userName + SPACE + amount + SPACE + years + SPACE + rate;
-        when(loanManager.getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        when(loanManager.getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate))).thenReturn(optionalLoan);
 
         String lump = "10000";
         String emai = "5";
         String paymentCall = "PAYMENT" + SPACE + bankName + SPACE + userName + SPACE + lump + SPACE + emai;
-        when(loanManager.makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        when(loanManager.makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         )).thenReturn(Optional.empty());
 
         String balanceCall = "BALANCE" + SPACE + bankName + SPACE + userName + SPACE + emai;
@@ -190,9 +189,9 @@ public class InputResolverTest {
         )).thenReturn("balanceString");
 
         List<String> outPuts = inputResolver.resolve(Arrays.asList(loanRecord, paymentCall, balanceCall));
-        verify(loanManager).getNewLoan(bankName, userName, Integer.valueOf(amount), Integer.parseInt(years),
+        verify(loanManager).getNewLoan(bankName, userName, Integer.parseInt(amount), Integer.parseInt(years),
             Integer.parseInt(rate));
-        verify(loanManager).makePayment(bankName, userName, Integer.valueOf(lump), Integer.parseInt(emai)
+        verify(loanManager).makePayment(bankName, userName, Integer.parseInt(lump), Integer.parseInt(emai)
         );
         verify(loanManager, times(0)).generateBalance(bankName, userName, Integer.parseInt(emai)
         );
