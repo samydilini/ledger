@@ -5,8 +5,12 @@ import calculator.com.ledger.loan.calulator.models.Loan;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoanManager {
+
+    private static final Logger LOGGER = Logger.getLogger(LoanManager.class.getName());
 
     private static LoanManager loanManager;
 
@@ -25,6 +29,8 @@ public class LoanManager {
     public Optional<Loan> getNewLoan(String bankName, String userName, int amount, int years, int rate) {
         String key = bankName + userName;
         if (loanMap.get(key) != null) {
+            LOGGER.log(Level.WARNING, String.format("loan was already created for the user : %1s with Bank Name%2s ",
+                userName, bankName));
             return Optional.empty();
         }
 
@@ -34,22 +40,26 @@ public class LoanManager {
     }
 
     public Optional<Loan> makePayment(String bankName, String userName, int lump, int emi) {
+        Optional<Loan> loan = findLoan(bankName, userName);
+
+        return loan.isEmpty() ? loan : Optional.of(loan.get().addPayment(lump, emi));
+    }
+
+    private Optional<Loan> findLoan(String bankName, String userName) {
         String key = bankName + userName;
         Loan loan = loanMap.get(key);
         if (loan == null) {
+            LOGGER.log(Level.WARNING, String.format("loan was not found for the user : %1s with Bank Name%2s ",
+                userName, bankName));
             return Optional.empty();
         }
-
-        return Optional.of(loan.addPayment(lump, emi));
+        return Optional.of(loan);
     }
 
     public String generateBalance(String bankName, String userName, int emi) {
-        String key = bankName + userName;
-        Loan loan = loanMap.get(key);
-        if (loan == null) {
-            return null;
-        }
-        return loan.getBalance(emi);
+        Optional<Loan> loan = findLoan(bankName, userName);
+
+        return loan.isEmpty()?null: loan.get().getBalance(emi);
     }
 
     protected Loan getLoan(String key) {
