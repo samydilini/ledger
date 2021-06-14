@@ -14,16 +14,23 @@ import calculator.com.ledger.loan.calulator.models.Loan;
 
 public class InputResolver {
 
+    private static InputResolver inputResolver;
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
     private LoanManager loanManager;
 
-    public InputResolver() {
+    private InputResolver() {
         loanManager = LoanManager.getLoanManager();
     }
 
     public InputResolver(LoanManager loanManager) {
         this.loanManager = loanManager;
+    }
+    public static InputResolver getInputResolverInstance(){
+        if(inputResolver == null) {
+            inputResolver = new InputResolver();
+        }
+        return inputResolver;
     }
 
     public List<String> resolve(List<String> records) {
@@ -53,9 +60,6 @@ public class InputResolver {
                     if (!StringUtils.isBlank(output)) {
                         strings.add(output);
                     }
-                    break;
-
-                default:
                     break;
             }
         }
