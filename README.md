@@ -1,8 +1,8 @@
-1.Dependency injection can be seen at Services
-2.classes are doing there own responsibilities.
-3.Services are using singleton to instantiate.
-4.87% test coverage is achieved
-5.Error handling and validating is done for the files.
+1. Dependency injection can be seen at Services
+2. classes are doing there own responsibilities.
+3. Services are using singleton to instantiate.
+4. 87% test coverage is achieved
+5. Error handling and validating is done for the files.
 
 Assumptions
 A loan will be identified by user name and the bank name
